@@ -42,16 +42,11 @@ public class RecommendRestaurants extends HttpServlet {
 			response.setStatus(403);
 			return;
 		}
-		if (!request.getParameterMap().containsKey("user_id") || !request.getParameter("user_id").equals(session.getAttribute("user"))) {
-			response.setStatus(403);
-			return;
-		}
 		JSONArray array = new JSONArray();
 		
-		if (request.getParameterMap().containsKey("user_id")) {
-			String userId = request.getParameter("user_id");
-			array = conn.recommendRestaurants(userId);
-		}
+		String userId = (String)session.getAttribute("user");
+		array = conn.recommendRestaurants(userId);
+		
 		
 		RpcParser.writeOutput(response, array);
 	}

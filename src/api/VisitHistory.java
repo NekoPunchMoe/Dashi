@@ -45,17 +45,11 @@ public class VisitHistory extends HttpServlet {
 			response.setStatus(403);
 			return;
 		}
-		if (!request.getParameterMap().containsKey("user_id") || !request.getParameter("user_id").equals(session.getAttribute("user"))) {
-			response.setStatus(403);
-			return;
-		}
 		JSONArray array = new JSONArray();
-		if(request.getParameterMap().containsKey("user_id")) {
-			String userId = request.getParameter("user_id");
-			Set<String> result = connection.getVisitedRestaurants(userId);
-			for(String str : result) {
-				array.put(connection.getRestaurantsById(str, true));
-			}
+		String userId = (String)session.getAttribute("user");
+		Set<String> result = connection.getVisitedRestaurants(userId);
+		for(String str : result) {
+			array.put(connection.getRestaurantsById(str, true));
 		}
 		RpcParser.writeOutput(response, array);
 	}
